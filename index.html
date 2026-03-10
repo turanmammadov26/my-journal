@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Дневник</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
@@ -326,6 +327,7 @@ textarea:focus { border-bottom-color: var(--accent); }
 
   <!-- THEME SWITCHER -->
   <div class="theme-bar">
+    <div id="storageIndicator" style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.12em;padding:4px 8px;border-radius:2px;margin-right:auto;opacity:0.6"></div>
     <button class="th-btn active" data-theme="bw" title="Ч/Б"><span>ч/б</span></button>
     <button class="th-btn" data-theme="indigo" title="Индиго"><span>индиго</span></button>
     <button class="th-btn" data-theme="cyber" title="Киберпанк"><span>кибер</span></button>
@@ -441,6 +443,19 @@ const DAYS_RU    = ['воскресенье','понедельник','втор�
 
 const TG = window.Telegram?.WebApp;
 if (TG) TG.ready();
+
+// Show which storage is active
+function updateStorageIndicator() {
+  const el = document.getElementById('storageIndicator');
+  if (!el) return;
+  if (TG?.CloudStorage) {
+    el.textContent = '☁ telegram cloud';
+    el.style.color = '#00cc55';
+  } else {
+    el.textContent = '⚠ local only';
+    el.style.color = '#e67e22';
+  }
+}
 
 const Storage = {
   // Is Telegram CloudStorage available?
@@ -608,6 +623,7 @@ let currentTheme = 'bw';
 
 // Async boot
 (async () => {
+  updateStorageIndicator();
   // Load theme
   currentTheme = await loadTheme();
 
