@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Дневник</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
 
@@ -21,9 +21,13 @@
   --glow: transparent;
   --cell-text: #000;
   --T: 0.4s cubic-bezier(0.4,0,0.2,1);
+  --font-display: 'Share Tech Mono', monospace;
+  --font-ui: 'Share Tech Mono', monospace;
 }
 
-/* ── THEMES ── */
+/* ══════════════════════════════════════════
+   DARK THEMES (original)
+══════════════════════════════════════════ */
 body.theme-bw     { --bg: #0a0a0a; --glow: transparent; }
 body.theme-indigo { --bg: #0c0d18; }
 body.theme-cyber  { --bg: #040a06; }
@@ -34,50 +38,122 @@ body.theme-nothing {
   --muted: #3a3a3a;
   --border: rgba(255,0,0,0.12);
   --glow: rgba(255,30,30,0.08);
-  
 }
 body.theme-nothing .hdr-title,
 body.theme-nothing .big-num,
 body.theme-nothing .month-name,
 body.theme-nothing .detail-score {
-  
   font-style: normal !important;
   font-weight: 400 !important;
   letter-spacing: 0.04em !important;
 }
 body.theme-nothing .hdr-title strong { font-weight: 400 !important; }
-body.theme-nothing textarea {
-  
-  font-style: normal !important;
-}
-body.theme-nothing .tab,
-body.theme-nothing .lbl,
-body.theme-nothing .char-ct,
-body.theme-nothing .hdr-date,
-body.theme-nothing .slider-marks span,
-body.theme-nothing .month-year,
-body.theme-nothing .cal-head span,
-body.theme-nothing .detail-date,
-body.theme-nothing .btn-save {
-  
-}
-/* Nothing-style dot grid background */
+body.theme-nothing textarea { font-style: normal !important; }
 body.theme-nothing::after {
   content: '';
-  position: fixed;
-  inset: 0;
+  position: fixed; inset: 0;
   background-image: radial-gradient(circle, rgba(255,255,255,0.035) 1px, transparent 1px);
   background-size: 20px 20px;
-  pointer-events: none;
-  z-index: 0;
+  pointer-events: none; z-index: 0;
 }
-/* Nothing glyph border on calendar cells */
 body.theme-nothing .cal-cell.has-entry {
   border: 1px solid rgba(255,30,30,0.3) !important;
 }
 
+/* ══════════════════════════════════════════
+   LIGHT THEMES (new)
+══════════════════════════════════════════ */
+
+/* ── Ivory ── warm cream paper */
+body.theme-ivory {
+  --bg:      #F7F4EF;
+  --surface: rgba(0,0,0,0.035);
+  --text:    #1C1916;
+  --muted:   #A89E98;
+  --border:  rgba(0,0,0,0.09);
+  --accent:  #C8865A;
+  --glow:    transparent;
+  --font-display: 'Lora', Georgia, serif;
+  --font-ui: 'Lora', Georgia, serif;
+}
+body.theme-ivory .tabs { background: #F7F4EF; }
+body.theme-ivory textarea { color: #1C1916; }
+body.theme-ivory textarea::placeholder { color: #C4B8B0; }
+body.theme-ivory .detail-note { color: rgba(28,25,22,0.75); }
+body.theme-ivory .btn-save { color: #F7F4EF; }
+body.theme-ivory .hdr-title { font-family: 'Lora', Georgia, serif; font-weight: 600; letter-spacing: -0.02em; }
+body.theme-ivory .hdr-title strong { font-weight: 600; }
+body.theme-ivory .big-num { font-family: 'Lora', Georgia, serif; font-weight: 400; }
+body.theme-ivory .month-name { font-family: 'Lora', Georgia, serif; }
+body.theme-ivory .detail-score { font-family: 'Lora', Georgia, serif; }
+body.theme-ivory .tab,
+body.theme-ivory .lbl,
+body.theme-ivory .char-ct,
+body.theme-ivory .hdr-date,
+body.theme-ivory .slider-marks span,
+body.theme-ivory .month-year,
+body.theme-ivory .cal-head span,
+body.theme-ivory .detail-date { font-family: 'Share Tech Mono', monospace; }
+
+/* ── Ash ── cool slate */
+body.theme-ash {
+  --bg:      #F0F2F5;
+  --surface: rgba(0,0,0,0.03);
+  --text:    #1A1D23;
+  --muted:   #9BA3AF;
+  --border:  rgba(0,0,0,0.08);
+  --accent:  #5B7CE6;
+  --glow:    transparent;
+}
+body.theme-ash .tabs { background: #F0F2F5; }
+body.theme-ash textarea { color: #1A1D23; }
+body.theme-ash textarea::placeholder { color: #B8C0CC; }
+body.theme-ash .detail-note { color: rgba(26,29,35,0.75); }
+body.theme-ash .btn-save { color: #ffffff; }
+
+/* ── Sage ── muted forest green */
+body.theme-sage {
+  --bg:      #EEF2EC;
+  --surface: rgba(0,0,0,0.03);
+  --text:    #1A2018;
+  --muted:   #96A490;
+  --border:  rgba(0,0,0,0.08);
+  --accent:  #5C8B52;
+  --glow:    transparent;
+}
+body.theme-sage .tabs { background: #EEF2EC; }
+body.theme-sage textarea { color: #1A2018; }
+body.theme-sage textarea::placeholder { color: #B0C0AA; }
+body.theme-sage .detail-note { color: rgba(26,32,24,0.75); }
+body.theme-sage .btn-save { color: #ffffff; }
+
+/* shared light overrides */
+body.theme-ivory,
+body.theme-ash,
+body.theme-sage {
+  --cell-text: #fff;
+}
+body.theme-ivory .cal-cell:not(.has-entry) .cal-day-num,
+body.theme-ash   .cal-cell:not(.has-entry) .cal-day-num,
+body.theme-sage  .cal-cell:not(.has-entry) .cal-day-num {
+  color: var(--muted) !important;
+}
+body.theme-ivory .cal-cell:not(.has-entry),
+body.theme-ash   .cal-cell:not(.has-entry),
+body.theme-sage  .cal-cell:not(.has-entry) {
+  background: rgba(0,0,0,0.04);
+}
+body.theme-ivory input[type=range]::-webkit-slider-runnable-track,
+body.theme-ash   input[type=range]::-webkit-slider-runnable-track,
+body.theme-sage  input[type=range]::-webkit-slider-runnable-track {
+  background: rgba(0,0,0,0.08);
+}
+
+/* ══════════════════════════════════════════
+   LAYOUT
+══════════════════════════════════════════ */
 body {
-  font-family: 'Share Tech Mono', monospace;
+  font-family: var(--font-ui);
   background: var(--bg);
   color: var(--text);
   min-height: 100vh;
@@ -85,17 +161,15 @@ body {
   flex-direction: column;
   align-items: center;
   padding: 0 0 100px;
-  transition: background var(--T);
+  transition: background var(--T), color var(--T);
   position: relative;
   overflow-x: hidden;
 }
 body::before {
   content: '';
-  position: fixed;
-  inset: 0;
+  position: fixed; inset: 0;
   background: radial-gradient(ellipse 70% 40% at 50% 0%, var(--glow), transparent 65%);
-  pointer-events: none;
-  z-index: 0;
+  pointer-events: none; z-index: 0;
   transition: background var(--T);
 }
 .wrap { width:100%; max-width:560px; position:relative; z-index:1; }
@@ -104,34 +178,51 @@ body::before {
 .theme-bar {
   display: flex;
   justify-content: flex-end;
+  align-items: center;
   gap: 6px;
   padding: 14px 24px 10px;
+  flex-wrap: wrap;
 }
 .th-btn {
-  width: 28px; height: 28px;
+  width: 26px; height: 26px;
   border-radius: 50%;
   border: 2px solid transparent;
   cursor: pointer;
-  transition: border-color 0.2s, transform 0.15s;
+  transition: border-color 0.2s, transform 0.15s, box-shadow 0.2s;
   position: relative;
+  flex-shrink: 0;
 }
-.th-btn:hover { transform: scale(1.15); }
-.th-btn.active { border-color: var(--accent); }
-.th-btn[data-theme="bw"]      { background: #fff; }
+.th-btn:hover { transform: scale(1.18); }
+.th-btn.active {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--accent);
+}
+/* dark swatches */
+.th-btn[data-theme="bw"]      { background: #fff; border-color: #555; }
 .th-btn[data-theme="indigo"]  { background: #7c6ff7; }
 .th-btn[data-theme="cyber"]   { background: #00ff88; }
-.th-btn[data-theme="nothing"] { background: #000; border-color: #ff1e1e !important; position:relative; overflow:hidden; }
+.th-btn[data-theme="nothing"] { background: #000; }
 .th-btn[data-theme="nothing"]::after { content:''; position:absolute; inset:3px; border-radius:50%; border:1px solid #ff1e1e; }
+/* light swatches */
+.th-btn[data-theme="ivory"] { background: #C8865A; }
+.th-btn[data-theme="ash"]   { background: #5B7CE6; }
+.th-btn[data-theme="sage"]  { background: #5C8B52; }
+
+/* divider between dark/light groups */
+.th-divider {
+  width: 1px; height: 18px;
+  background: var(--border);
+  margin: 0 2px;
+  flex-shrink: 0;
+}
+
 .th-btn span {
   position: absolute;
-  bottom: -18px;
-  left: 50%;
+  bottom: -18px; left: 50%;
   transform: translateX(-50%);
-  font-size: 8px;
-  letter-spacing: 0.08em;
+  font-size: 8px; letter-spacing: 0.08em;
   color: var(--muted);
-  white-space: nowrap;
-  display: none;
+  white-space: nowrap; display: none;
 }
 .th-btn:hover span { display: block; }
 
@@ -139,30 +230,24 @@ body::before {
 .tabs {
   display: flex;
   border-bottom: 1px solid var(--border);
-  position: sticky;
-  top: 0;
+  position: sticky; top: 0;
   background: var(--bg);
   z-index: 10;
-  transition: background var(--T);
+  transition: background var(--T), border-color var(--T);
 }
 .tab {
   flex: 1;
   padding: 16px 0;
   font-family: 'Share Tech Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
+  font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
   color: var(--muted);
-  background: none;
-  border: none;
-  cursor: pointer;
+  background: none; border: none; cursor: pointer;
   transition: color var(--T);
   position: relative;
 }
 .tab::after {
   content: '';
-  position: absolute;
-  bottom: -1px; left: 25%; width: 50%; height: 1px;
+  position: absolute; bottom: -1px; left: 25%; width: 50%; height: 1px;
   background: var(--accent);
   transform: scaleX(0);
   transition: transform var(--T), background var(--T);
@@ -178,54 +263,42 @@ body::before {
 .hdr { margin-bottom: 40px; }
 .hdr-date {
   font-family: 'Share Tech Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 8px;
+  font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 8px;
 }
 .hdr-title {
   font-size: clamp(34px, 9vw, 54px);
-  font-weight: 300;
-  line-height: 1.05;
-  letter-spacing: -0.03em;
+  font-weight: 300; line-height: 1.05; letter-spacing: -0.03em;
   color: var(--text);
+  font-family: var(--font-display);
+  transition: color var(--T);
 }
 .hdr-title strong {
-  font-weight: 500;
-  color: var(--accent);
+  font-weight: 500; color: var(--accent);
   transition: color var(--T);
 }
 
 /* ── LABEL ── */
 .lbl {
   font-family: 'Share Tech Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 12px;
+  font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 12px;
 }
 
 /* ── RATING ── */
 .rating-row { display:flex; align-items:flex-end; gap:10px; margin-bottom:20px; }
 .big-num {
-  font-size: 92px;
-  font-weight: 300;
-  line-height: 0.9;
+  font-size: 92px; font-weight: 300; line-height: 0.9;
   color: var(--accent);
+  font-family: var(--font-display);
   transition: color var(--T);
-  letter-spacing: -0.04em;
-  min-width: 130px;
+  letter-spacing: -0.04em; min-width: 130px;
 }
 .big-side { display:flex; flex-direction:column; gap:6px; padding-bottom:6px; }
 .big-denom { font-family:'Share Tech Mono', monospace; font-size:15px; color:var(--muted); }
 .big-lbl {
-  font-size: 13px;
-  font-weight: 300;
-  font-style: italic;
-  color: var(--muted);
-  transition: color var(--T);
+  font-size: 13px; font-weight: 300; font-style: italic;
+  color: var(--muted); transition: color var(--T);
 }
 
 input[type=range] {
@@ -233,6 +306,7 @@ input[type=range] {
   width: 100%; height: 3px;
   border-radius: 2px; outline: none; cursor: pointer;
   margin-bottom: 8px;
+  background: rgba(255,255,255,0.07);
 }
 input[type=range]::-webkit-slider-thumb {
   -webkit-appearance: none;
@@ -250,7 +324,7 @@ input[type=range]::-moz-range-thumb {
 .slider-marks { display:flex; justify-content:space-between; }
 .slider-marks span { font-family:'Share Tech Mono', monospace; font-size:9px; color:var(--muted); }
 
-.divider { height:1px; background:var(--border); margin:28px 0; }
+.divider { height:1px; background:var(--border); margin:28px 0; transition: background var(--T); }
 
 /* ── TEXTAREA ── */
 .note-wrap { margin-bottom:26px; }
@@ -259,11 +333,11 @@ textarea {
   border: none; border-bottom: 1px solid var(--border);
   color: var(--text);
   font-family: 'Share Tech Mono', monospace;
-  font-size: 16px; font-weight: 300;
-  line-height: 1.8; padding: 4px 0 14px;
+  font-size: 16px; font-weight: 300; line-height: 1.8;
+  padding: 4px 0 14px;
   resize: none; outline: none; min-height: 120px;
   caret-color: var(--accent);
-  transition: border-color var(--T);
+  transition: border-color var(--T), color var(--T);
 }
 textarea::placeholder { color: var(--muted); opacity: 0.45; }
 textarea:focus { border-bottom-color: var(--accent); }
@@ -280,7 +354,7 @@ textarea:focus { border-bottom-color: var(--accent); }
   cursor: pointer;
   transition: background var(--T), opacity 0.15s, transform 0.15s;
 }
-.btn-save:hover { opacity: 0.8; transform: translateY(-1px); }
+.btn-save:hover { opacity: 0.82; transform: translateY(-1px); }
 .btn-save:active { transform: translateY(0); }
 
 /* ── TOAST ── */
@@ -297,7 +371,7 @@ textarea:focus { border-bottom-color: var(--accent); }
 }
 .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
-/* ══ MONTH PAGE ══ */
+/* ── MONTH ── */
 .month-nav { display:flex; align-items:center; justify-content:space-between; margin-bottom:28px; }
 .mnav-btn {
   background: none; border: none; color: var(--muted);
@@ -309,6 +383,8 @@ textarea:focus { border-bottom-color: var(--accent); }
 .month-name {
   font-size: 24px; font-weight: 300; letter-spacing: -0.02em;
   text-align: center;
+  font-family: var(--font-display);
+  transition: font-family var(--T);
 }
 .month-year {
   font-family: 'Share Tech Mono', monospace;
@@ -339,7 +415,7 @@ textarea:focus { border-bottom-color: var(--accent); }
   font-family: 'Share Tech Mono', monospace;
   font-size: 9px; color: var(--muted); line-height: 1; margin-bottom: 1px;
 }
-.cal-cell.has-entry .cal-day-num { color: rgba(0,0,0,0.65); font-weight: 500; }
+.cal-cell.has-entry .cal-day-num { color: rgba(0,0,0,0.55); font-weight: 500; }
 .cal-score { font-size: 11px; font-weight: 500; color: #000; line-height: 1; }
 
 /* ── DETAIL ── */
@@ -350,7 +426,7 @@ textarea:focus { border-bottom-color: var(--accent); }
   background: var(--surface);
   display: none;
   animation: fadeUp 0.22s ease;
-  transition: border-color var(--T);
+  transition: border-color var(--T), background var(--T);
 }
 .detail.visible { display: block; }
 @keyframes fadeUp { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:none} }
@@ -362,6 +438,7 @@ textarea:focus { border-bottom-color: var(--accent); }
 .detail-score {
   font-size: 44px; font-weight: 300; letter-spacing: -0.04em;
   line-height: 1; margin-bottom: 2px;
+  font-family: var(--font-display);
   transition: color var(--T);
 }
 .detail-label {
@@ -370,6 +447,14 @@ textarea:focus { border-bottom-color: var(--accent); }
 }
 .detail-note { font-size: 15px; font-weight: 300; line-height: 1.75; color: rgba(240,240,240,0.7); }
 .no-note { font-size: 12px; font-style: italic; color: var(--muted); opacity: 0.4; }
+
+/* storage indicator */
+#storageIndicator {
+  font-family:'Share Tech Mono', monospace;
+  font-size:9px;letter-spacing:0.12em;
+  padding:4px 8px;border-radius:2px;
+  margin-right:auto;opacity:0.6;
+}
 </style>
 </head>
 <body class="theme-bw">
@@ -377,11 +462,20 @@ textarea:focus { border-bottom-color: var(--accent); }
 
   <!-- THEME SWITCHER -->
   <div class="theme-bar">
-    <div id="storageIndicator" style="font-family:'Share Tech Mono', monospace;font-size:9px;letter-spacing:0.12em;padding:4px 8px;border-radius:2px;margin-right:auto;opacity:0.6"></div>
-    <button class="th-btn active" data-theme="bw" title="Ч/Б"><span>ч/б</span></button>
-    <button class="th-btn" data-theme="indigo" title="Индиго"><span>индиго</span></button>
-    <button class="th-btn" data-theme="cyber" title="Киберпанк"><span>кибер</span></button>
-    <button class="th-btn" data-theme="nothing" title="Nothing"><span>nothing</span></button>
+    <div id="storageIndicator"></div>
+
+    <!-- dark -->
+    <button class="th-btn active" data-theme="bw"      title="Ч/Б"><span>ч/б</span></button>
+    <button class="th-btn"        data-theme="indigo"   title="Индиго"><span>индиго</span></button>
+    <button class="th-btn"        data-theme="cyber"    title="Кибер"><span>кибер</span></button>
+    <button class="th-btn"        data-theme="nothing"  title="Nothing"><span>nothing</span></button>
+
+    <div class="th-divider"></div>
+
+    <!-- light -->
+    <button class="th-btn" data-theme="ivory" title="Ivory"><span>ivory</span></button>
+    <button class="th-btn" data-theme="ash"   title="Ash"><span>ash</span></button>
+    <button class="th-btn" data-theme="sage"  title="Sage"><span>sage</span></button>
   </div>
 
   <!-- TABS -->
@@ -446,39 +540,64 @@ textarea:focus { border-bottom-color: var(--accent); }
 <div class="toast" id="toast">сохранено</div>
 
 <script>
-/* ── THEME PALETTES ── */
-// scale[0]=rating1 … scale[9]=rating10
-// uiScale: accent color shown on big number / slider / button per rating
+/* ══════════════════════════════════════════
+   THEME PALETTES
+══════════════════════════════════════════ */
 const THEMES = {
   bw: {
-    scale:    ['#1a1a1a','#252525','#333','#444','#565656','#6e6e6e','#888','#aaa','#ccc','#fff'],
-    cellText: (i) => i < 5 ? '#888' : '#000',
-    uiScale:  ['#3a3a3a','#484848','#595959','#6e6e6e','#888','#999','#aaa','#c0c0c0','#dedede','#ffffff'],
-    glow:     (col) => 'transparent',
+    scale:   ['#1a1a1a','#252525','#333','#444','#565656','#6e6e6e','#888','#aaa','#ccc','#fff'],
+    cellTxt: i => i < 5 ? '#888' : '#000',
+    uiScale: ['#3a3a3a','#484848','#595959','#6e6e6e','#888','#999','#aaa','#c0c0c0','#dedede','#ffffff'],
+    glow:    () => 'transparent',
   },
   indigo: {
-    scale:    ['#1a0a2e','#231245','#2e1a60','#3b2580','#5040a8','#6655c8','#7c6ff7','#9b8eff','#b8aeff','#d4cfff'],
-    cellText: (i) => i < 4 ? '#a090ff' : '#fff',
-    uiScale:  ['#2e1060','#3b1a7a','#4a2898','#5c3ab8','#6e50cc','#7c6ff7','#8e80ff','#a89eff','#c0b8ff','#d4cfff'],
-    glow:     (col) => `rgba(${hexToRgb(col)},0.14)`,
+    scale:   ['#1a0a2e','#231245','#2e1a60','#3b2580','#5040a8','#6655c8','#7c6ff7','#9b8eff','#b8aeff','#d4cfff'],
+    cellTxt: i => i < 4 ? '#a090ff' : '#fff',
+    uiScale: ['#2e1060','#3b1a7a','#4a2898','#5c3ab8','#6e50cc','#7c6ff7','#8e80ff','#a89eff','#c0b8ff','#d4cfff'],
+    glow:    c => `rgba(${hexRgb(c)},0.14)`,
   },
   cyber: {
-    scale:    ['#001a0a','#002a10','#003d18','#005522','#007a30','#00a840','#00cc55','#00ee66','#00ff88','#aaffdd'],
-    cellText: (i) => i < 3 ? '#00cc55' : '#000',
-    uiScale:  ['#004418','#005a20','#007a30','#009940','#00bb50','#00cc55','#00dd66','#00ee77','#00ff88','#aaffdd'],
-    glow:     (col) => `rgba(${hexToRgb(col)},0.12)`,
+    scale:   ['#001a0a','#002a10','#003d18','#005522','#007a30','#00a840','#00cc55','#00ee66','#00ff88','#aaffdd'],
+    cellTxt: i => i < 3 ? '#00cc55' : '#000',
+    uiScale: ['#004418','#005a20','#007a30','#009940','#00bb50','#00cc55','#00dd66','#00ee77','#00ff88','#aaffdd'],
+    glow:    c => `rgba(${hexRgb(c)},0.12)`,
   },
   nothing: {
-    // Pure black → deep red → bright red. Nothing OS palette.
-    scale:    ['#0d0000','#1a0000','#280000','#3d0000','#550000','#7a0000','#aa0000','#cc1111','#ee2222','#ff3333'],
-    cellText: (i) => i < 5 ? '#ff3333' : '#fff',
-    uiScale:  ['#3a0000','#4d0000','#660000','#880000','#aa0000','#bb0000','#cc1111','#dd1111','#ee2222','#ff3333'],
-    glow:     (col) => `rgba(${hexToRgb(col)},0.15)`,
+    scale:   ['#0d0000','#1a0000','#280000','#3d0000','#550000','#7a0000','#aa0000','#cc1111','#ee2222','#ff3333'],
+    cellTxt: i => i < 5 ? '#ff3333' : '#fff',
+    uiScale: ['#3a0000','#4d0000','#660000','#880000','#aa0000','#bb0000','#cc1111','#dd1111','#ee2222','#ff3333'],
+    glow:    c => `rgba(${hexRgb(c)},0.15)`,
+  },
+
+  /* ── LIGHT THEMES ── */
+  ivory: {
+    // warm terracotta progression: pale cream → deep terracotta
+    scale:   ['#F2EBE2','#ECD9C8','#E4C4A4','#DFB080','#D89C60','#CF8A48','#C8865A','#B87040','#A05A30','#8A4420'],
+    cellTxt: i => i < 4 ? '#8A6450' : '#fff',
+    uiScale: ['#D4A070','#CC9060','#C8865A','#BF7848','#B56F43','#AA6438','#9E582E','#924C24','#86401A','#7A3410'],
+    glow:    () => 'transparent',
+    light:   true,
+  },
+  ash: {
+    // cool blue-grey progression: pale lavender → deep indigo
+    scale:   ['#E8EAF0','#D4D9EC','#BEC6E6','#A4AFDA','#8898CC','#6E84C0','#5B7CE6','#4568D4','#3454C0','#2040AC'],
+    cellTxt: i => i < 3 ? '#5060A0' : '#fff',
+    uiScale: ['#7A90D8','#6E84D0','#6078C8','#5570C0','#4E68B8','#4864B4','#4060B0','#3858A8','#3050A0','#284898'],
+    glow:    () => 'transparent',
+    light:   true,
+  },
+  sage: {
+    // muted green progression: pale mint → deep forest
+    scale:   ['#E8EEE6','#D4E2D0','#BDD4B8','#A4C49E','#8AB484','#72A46C','#5C8B52','#487040','#365830','#244020'],
+    cellTxt: i => i < 3 ? '#508040' : '#fff',
+    uiScale: ['#78A870','#6C9C64','#609058','#54844C','#4C7844','#456C3C','#3E6034','#38542C','#304824','#283C1C'],
+    glow:    () => 'transparent',
+    light:   true,
   },
 };
 
-function hexToRgb(hex) {
-  const r = parseInt(hex.slice(1,3),16), g = parseInt(hex.slice(3,5),16), b = parseInt(hex.slice(5,7),16);
+function hexRgb(hex) {
+  const r=parseInt(hex.slice(1,3),16), g=parseInt(hex.slice(3,5),16), b=parseInt(hex.slice(5,7),16);
   return `${r},${g},${b}`;
 }
 
@@ -493,152 +612,89 @@ const MONTHS_RU  = ['январь','февраль','март','апрель','�
 const MONTHS_GEN = ['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
 const DAYS_RU    = ['воскресенье','понедельник','вторник','среда','четверг','пятница','суббота'];
 
-// ── STORAGE LAYER ──
-// Tries Telegram CloudStorage first, falls back to localStorage.
-// Telegram CloudStorage stores string values under string keys.
-// We chunk entries into monthly buckets: key = "entries_YYYY_MM"
-// so we stay well under the 4096-char value limit per key.
-
+/* ── STORAGE ── */
 const TG = window.Telegram?.WebApp;
 if (TG) TG.ready();
 
-// Show which storage is active
 function updateStorageIndicator() {
   const el = document.getElementById('storageIndicator');
   if (!el) return;
-  if (TG?.CloudStorage) {
-    el.textContent = '☁ telegram cloud';
-    el.style.color = '#00cc55';
-  } else {
-    el.textContent = '⚠ local only';
-    el.style.color = '#e67e22';
-  }
+  if (TG?.CloudStorage) { el.textContent = '☁ telegram cloud'; el.style.color = '#00cc55'; }
+  else                  { el.textContent = '⚠ local only';     el.style.color = '#e67e22'; }
 }
 
 const Storage = {
-  // Is Telegram CloudStorage available?
   _tg: !!(TG?.CloudStorage),
-
-  _getLocal(key) {
-    try { return localStorage.getItem(key); } catch { return null; }
-  },
-  _setLocal(key, val) {
-    try { localStorage.setItem(key, val); } catch {}
-  },
-
-  // Promise-based get
+  _getLocal(k)    { try{ return localStorage.getItem(k); }catch{ return null; } },
+  _setLocal(k, v) { try{ localStorage.setItem(k, v); }catch{} },
   get(key) {
-    return new Promise(resolve => {
-      if (this._tg) {
-        TG.CloudStorage.getItem(key, (err, val) => resolve(err ? null : (val || null)));
-      } else {
-        resolve(this._getLocal(key));
-      }
+    return new Promise(r => {
+      if (this._tg) TG.CloudStorage.getItem(key, (err,v) => r(err?null:(v||null)));
+      else r(this._getLocal(key));
     });
   },
-
-  // Promise-based set
   set(key, val) {
-    return new Promise(resolve => {
-      // Always write to localStorage as offline cache
+    return new Promise(r => {
       this._setLocal(key, val);
-      if (this._tg) {
-        TG.CloudStorage.setItem(key, val, (err) => resolve(!err));
-      } else {
-        resolve(true);
-      }
+      if (this._tg) TG.CloudStorage.setItem(key, val, err => r(!err));
+      else r(true);
     });
   },
-
-  // Get all keys matching a prefix (used to load all monthly buckets)
   getKeys() {
-    return new Promise(resolve => {
-      if (this._tg) {
-        TG.CloudStorage.getKeys((err, keys) => resolve(err ? [] : (keys || [])));
-      } else {
-        const keys = [];
-        try {
-          for (let i = 0; i < localStorage.length; i++) {
-            const k = localStorage.key(i);
-            if (k) keys.push(k);
-          }
-        } catch {}
-        resolve(keys);
+    return new Promise(r => {
+      if (this._tg) TG.CloudStorage.getKeys((err,k) => r(err?[]:(k||[])));
+      else {
+        const k=[];
+        try{ for(let i=0;i<localStorage.length;i++){ const key=localStorage.key(i); if(key) k.push(key); } }catch{}
+        r(k);
       }
     });
   }
 };
 
-// ── ENTRY STORAGE HELPERS ──
-// Entries are bucketed by month: key = "j_entries_YYYY_MM"
-// Theme stored at key "j_theme"
-
 function monthKey(dateStr) {
-  // dateStr = "DD.MM.YYYY"
-  const [d, m, y] = dateStr.split('.');
+  const [d,m,y] = dateStr.split('.');
   return `j_entries_${y}_${m}`;
 }
-
 async function loadAllEntries() {
-  const keys = await Storage.getKeys();
-  const entryKeys = keys.filter(k => k.startsWith('j_entries_'));
-  if (!entryKeys.length) return [];
+  const keys = (await Storage.getKeys()).filter(k => k.startsWith('j_entries_'));
+  if (!keys.length) return [];
   const all = [];
-  for (const k of entryKeys) {
+  for (const k of keys) {
     const raw = await Storage.get(k);
-    if (raw) {
-      try { all.push(...JSON.parse(raw)); } catch {}
-    }
+    if (raw) { try{ all.push(...JSON.parse(raw)); }catch{} }
   }
-  // sort newest first
-  all.sort((a, b) => b.ts - a.ts);
+  all.sort((a,b) => b.ts - a.ts);
   return all;
 }
-
 async function saveEntry(entry) {
   const k = monthKey(entry.date);
   const raw = await Storage.get(k);
   let bucket = [];
-  try { bucket = raw ? JSON.parse(raw) : []; } catch {}
-  const idx = bucket.findIndex(e => e.date === entry.date);
-  if (idx >= 0) bucket[idx] = entry; else bucket.push(entry);
+  try{ bucket = raw ? JSON.parse(raw) : []; }catch{}
+  const i = bucket.findIndex(e => e.date === entry.date);
+  if (i >= 0) bucket[i] = entry; else bucket.push(entry);
   await Storage.set(k, JSON.stringify(bucket));
 }
+async function loadTheme() { return (await Storage.get('j_theme')) || 'bw'; }
+async function saveTheme(name) { await Storage.set('j_theme', name); }
 
-async function loadTheme() {
-  const t = await Storage.get('j_theme');
-  return t || 'bw';
-}
-
-async function saveTheme(name) {
-  await Storage.set('j_theme', name);
-}
-
-// ── BOOT ──
+/* ── BOOT ── */
 const now = new Date();
 const pad = n => n.toString().padStart(2,'0');
 const dateKey = d => `${pad(d.getDate())}.${pad(d.getMonth()+1)}.${d.getFullYear()}`;
 const todayKey = dateKey(now);
 const fmtR = v => v%1===0 ? v+'.0' : String(v);
 
-let entries = []; // populated after async load
+let entries = [];
 let appReady = false;
+let currentTheme = 'bw';
 
-/* rating → cell color */
-function cellColor(rating) {
-  const t = THEMES[currentTheme];
-  const idx = Math.min(9, Math.max(0, Math.round(rating) - 1));
-  return t.scale[idx];
-}
-function cellTextColor(rating) {
-  const t = THEMES[currentTheme];
-  const idx = Math.min(9, Math.max(0, Math.round(rating) - 1));
-  return t.cellText(idx);
-}
-function ratingIdx(v) { return Math.min(9, Math.max(0, Math.round(v) - 1)); }
-function uiColor(v) { return THEMES[currentTheme].uiScale[ratingIdx(v)]; }
+function cellColor(r)    { const t=THEMES[currentTheme], i=Math.min(9,Math.max(0,Math.round(r)-1)); return t.scale[i]; }
+function cellTextColor(r){ const t=THEMES[currentTheme], i=Math.min(9,Math.max(0,Math.round(r)-1)); return t.cellTxt(i); }
+function ratingIdx(v)    { return Math.min(9,Math.max(0,Math.round(v)-1)); }
+function uiColor(v)      { return THEMES[currentTheme].uiScale[ratingIdx(v)]; }
 
-/* apply UI accent color */
 const slider    = document.getElementById('ratingSlider');
 const ratingNum = document.getElementById('ratingNum');
 const ratingLbl = document.getElementById('ratingLabel');
@@ -650,45 +706,37 @@ const toast     = document.getElementById('toast');
 function applyUIColor(v) {
   const col = uiColor(v);
   const pct = ((v-1)/9*100).toFixed(1)+'%';
+  const isLight = THEMES[currentTheme].light;
+  const trackBg = isLight ? 'rgba(0,0,0,0.08)' : 'rgba(255,255,255,0.07)';
   document.documentElement.style.setProperty('--accent', col);
   document.documentElement.style.setProperty('--glow', THEMES[currentTheme].glow(col));
-  slider.style.background = `linear-gradient(to right,${col} 0%,${col} ${pct},rgba(255,255,255,0.07) ${pct},rgba(255,255,255,0.07) 100%)`;
+  slider.style.background = `linear-gradient(to right,${col} 0%,${col} ${pct},${trackBg} ${pct},${trackBg} 100%)`;
 }
 
-function setTheme(name, save = true) {
+function setTheme(name, save=true) {
   currentTheme = name;
   if (save) saveTheme(name);
   document.body.className = 'theme-' + name;
-  document.querySelectorAll('.th-btn').forEach(b => b.classList.toggle('active', b.dataset.theme === name));
+  document.querySelectorAll('.th-btn').forEach(b => b.classList.toggle('active', b.dataset.theme===name));
   applyUIColor(parseFloat(slider.value));
-  if (!document.getElementById('tab-month').classList.contains('active')) return;
-  renderCal();
+  if (document.getElementById('tab-month').classList.contains('active')) renderCal();
 }
 
 document.querySelectorAll('.th-btn').forEach(btn => {
   btn.addEventListener('click', () => setTheme(btn.dataset.theme));
 });
 
-/* date header */
 document.getElementById('dateDisplay').textContent =
   `${DAYS_RU[now.getDay()]}, ${now.getDate()} ${MONTHS_GEN[now.getMonth()]} ${now.getFullYear()}`;
 
-// Show loading state until data is ready
-document.getElementById('saveBtn').disabled = true;
-document.getElementById('saveBtn').textContent = 'загрузка…';
+saveBtn.disabled = true;
+saveBtn.textContent = 'загрузка…';
 
-let currentTheme = 'bw';
-
-// Async boot
 (async () => {
   updateStorageIndicator();
-  // Load theme
   currentTheme = await loadTheme();
-
-  // Load all entries
   entries = await loadAllEntries();
 
-  // Pre-fill today if exists
   const te = entries.find(e => e.date === todayKey);
   if (te) {
     slider.value = te.rating;
@@ -700,8 +748,8 @@ let currentTheme = 'bw';
 
   setTheme(currentTheme, false);
   appReady = true;
-  document.getElementById('saveBtn').disabled = false;
-  document.getElementById('saveBtn').textContent = 'сохранить день';
+  saveBtn.disabled = false;
+  saveBtn.textContent = 'сохранить день';
 })();
 
 slider.addEventListener('input', () => {
@@ -716,19 +764,14 @@ saveBtn.addEventListener('click', async () => {
   if (!appReady) return;
   const val = parseFloat(slider.value), note = noteArea.value.trim();
   const entry = { date: todayKey, rating: val, note, ts: Date.now() };
-
-  // Update local array
-  const idx = entries.findIndex(e => e.date === todayKey);
-  if (idx >= 0) entries[idx] = entry; else entries.unshift(entry);
-
-  // Persist
+  const i = entries.findIndex(e => e.date === todayKey);
+  if (i >= 0) entries[i] = entry; else entries.unshift(entry);
   saveBtn.disabled = true;
   await saveEntry(entry);
   saveBtn.disabled = false;
-
   toast.classList.add('show');
   setTimeout(() => toast.classList.remove('show'), 2000);
-  if (curY === now.getFullYear() && curM === now.getMonth()) renderCal();
+  if (curY===now.getFullYear() && curM===now.getMonth()) renderCal();
 });
 
 /* TABS */
@@ -737,7 +780,7 @@ document.querySelectorAll('.tab').forEach(btn => {
     document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     btn.classList.add('active');
-    document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+    document.getElementById('tab-'+btn.dataset.tab).classList.add('active');
     if (btn.dataset.tab === 'month') renderCal();
   });
 });
@@ -752,52 +795,52 @@ function renderCal() {
   document.getElementById('monthYear').textContent = curY;
   document.getElementById('detail').classList.remove('visible');
 
-  const firstDow = (new Date(curY, curM, 1).getDay() + 6) % 7;
-  const daysInMonth = new Date(curY, curM+1, 0).getDate();
+  const firstDow = (new Date(curY,curM,1).getDay()+6)%7;
+  const dim = new Date(curY,curM+1,0).getDate();
   const grid = document.getElementById('calGrid');
   grid.innerHTML = '';
 
-  for (let i = 0; i < firstDow; i++) {
-    const c = document.createElement('div'); c.className = 'cal-cell empty'; grid.appendChild(c);
+  for (let i=0;i<firstDow;i++) {
+    const c=document.createElement('div'); c.className='cal-cell empty'; grid.appendChild(c);
   }
-  for (let d = 1; d <= daysInMonth; d++) {
+  for (let d=1;d<=dim;d++) {
     const key = `${pad(d)}.${pad(curM+1)}.${curY}`;
-    const entry = entries.find(e => e.date === key);
+    const entry = entries.find(e => e.date===key);
     const isToday = curY===now.getFullYear() && curM===now.getMonth() && d===now.getDate();
     const cell = document.createElement('div');
-    cell.className = 'cal-cell' + (entry ? ' has-entry' : '') + (isToday ? ' today' : '');
+    cell.className = 'cal-cell'+(entry?' has-entry':'')+(isToday?' today':'');
 
     if (entry) {
       const bg  = cellColor(entry.rating);
       const txt = cellTextColor(entry.rating);
       cell.style.background = bg;
-      const dn = document.createElement('div'); dn.className = 'cal-day-num'; dn.textContent = d; dn.style.color = txt + 'aa';
-      const ds = document.createElement('div'); ds.className = 'cal-score'; ds.textContent = fmtR(entry.rating); ds.style.color = txt;
+      const dn=document.createElement('div'); dn.className='cal-day-num'; dn.textContent=d; dn.style.color=txt+'aa';
+      const ds=document.createElement('div'); ds.className='cal-score';   ds.textContent=fmtR(entry.rating); ds.style.color=txt;
       cell.appendChild(dn); cell.appendChild(ds);
-      cell.addEventListener('click', () => showDetail(entry, key, bg, txt));
+      cell.addEventListener('click', () => showDetail(entry, key));
     } else {
-      const dn = document.createElement('div'); dn.className = 'cal-day-num'; dn.textContent = d;
+      const dn=document.createElement('div'); dn.className='cal-day-num'; dn.textContent=d;
       cell.appendChild(dn);
     }
     grid.appendChild(cell);
   }
 }
 
-function showDetail(entry, key, bg, txt) {
+function showDetail(entry, key) {
   const [d,m,y] = key.split('.');
   const dObj = new Date(parseInt(y), parseInt(m)-1, parseInt(d));
   document.getElementById('detailDate').textContent = `${DAYS_RU[dObj.getDay()]}, ${parseInt(d)} ${MONTHS_GEN[parseInt(m)-1]} ${y}`;
   const sc = document.getElementById('detailScore');
   sc.textContent = fmtR(entry.rating);
-  sc.style.color = uiColor(entry.rating);
+  sc.style.color  = uiColor(entry.rating);
   document.getElementById('detailLabel').textContent = LABELS[entry.rating] || '';
   const dn = document.getElementById('detailNote');
-  if (entry.note) { dn.className = 'detail-note'; dn.textContent = entry.note; }
-  else { dn.className = 'no-note'; dn.textContent = 'нет заметки'; }
+  if (entry.note) { dn.className='detail-note'; dn.textContent=entry.note; }
+  else            { dn.className='no-note';      dn.textContent='нет заметки'; }
   const det = document.getElementById('detail');
   det.style.borderLeftColor = uiColor(entry.rating);
   det.classList.add('visible');
-  setTimeout(() => det.scrollIntoView({ behavior:'smooth', block:'nearest' }), 50);
+  setTimeout(() => det.scrollIntoView({behavior:'smooth',block:'nearest'}), 50);
 }
 </script>
 </body>
