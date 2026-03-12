@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Дневник</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
 
@@ -24,12 +24,60 @@
 }
 
 /* ── THEMES ── */
-body.theme-bw  { --bg: #0a0a0a; --glow: transparent; }
+body.theme-bw     { --bg: #0a0a0a; --glow: transparent; }
 body.theme-indigo { --bg: #0c0d18; }
 body.theme-cyber  { --bg: #040a06; }
+body.theme-nothing {
+  --bg: #000000;
+  --surface: rgba(255,255,255,0.02);
+  --text: #f0f0f0;
+  --muted: #3a3a3a;
+  --border: rgba(255,0,0,0.12);
+  --glow: rgba(255,30,30,0.08);
+  
+}
+body.theme-nothing .hdr-title,
+body.theme-nothing .big-num,
+body.theme-nothing .month-name,
+body.theme-nothing .detail-score {
+  
+  font-style: normal !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.04em !important;
+}
+body.theme-nothing .hdr-title strong { font-weight: 400 !important; }
+body.theme-nothing textarea {
+  
+  font-style: normal !important;
+}
+body.theme-nothing .tab,
+body.theme-nothing .lbl,
+body.theme-nothing .char-ct,
+body.theme-nothing .hdr-date,
+body.theme-nothing .slider-marks span,
+body.theme-nothing .month-year,
+body.theme-nothing .cal-head span,
+body.theme-nothing .detail-date,
+body.theme-nothing .btn-save {
+  
+}
+/* Nothing-style dot grid background */
+body.theme-nothing::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: radial-gradient(circle, rgba(255,255,255,0.035) 1px, transparent 1px);
+  background-size: 20px 20px;
+  pointer-events: none;
+  z-index: 0;
+}
+/* Nothing glyph border on calendar cells */
+body.theme-nothing .cal-cell.has-entry {
+  border: 1px solid rgba(255,30,30,0.3) !important;
+}
 
 body {
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Share Tech Mono', monospace;
   background: var(--bg);
   color: var(--text);
   min-height: 100vh;
@@ -69,9 +117,11 @@ body::before {
 }
 .th-btn:hover { transform: scale(1.15); }
 .th-btn.active { border-color: var(--accent); }
-.th-btn[data-theme="bw"]     { background: #fff; }
-.th-btn[data-theme="indigo"] { background: #7c6ff7; }
-.th-btn[data-theme="cyber"]  { background: #00ff88; }
+.th-btn[data-theme="bw"]      { background: #fff; }
+.th-btn[data-theme="indigo"]  { background: #7c6ff7; }
+.th-btn[data-theme="cyber"]   { background: #00ff88; }
+.th-btn[data-theme="nothing"] { background: #000; border-color: #ff1e1e !important; position:relative; overflow:hidden; }
+.th-btn[data-theme="nothing"]::after { content:''; position:absolute; inset:3px; border-radius:50%; border:1px solid #ff1e1e; }
 .th-btn span {
   position: absolute;
   bottom: -18px;
@@ -98,7 +148,7 @@ body::before {
 .tab {
   flex: 1;
   padding: 16px 0;
-  font-family: 'DM Mono', monospace;
+  font-family: 'Share Tech Mono', monospace;
   font-size: 10px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -127,7 +177,7 @@ body::before {
 /* ── HEADER ── */
 .hdr { margin-bottom: 40px; }
 .hdr-date {
-  font-family: 'DM Mono', monospace;
+  font-family: 'Share Tech Mono', monospace;
   font-size: 10px;
   letter-spacing: 0.2em;
   text-transform: uppercase;
@@ -149,7 +199,7 @@ body::before {
 
 /* ── LABEL ── */
 .lbl {
-  font-family: 'DM Mono', monospace;
+  font-family: 'Share Tech Mono', monospace;
   font-size: 9px;
   letter-spacing: 0.22em;
   text-transform: uppercase;
@@ -169,7 +219,7 @@ body::before {
   min-width: 130px;
 }
 .big-side { display:flex; flex-direction:column; gap:6px; padding-bottom:6px; }
-.big-denom { font-family:'DM Mono',monospace; font-size:15px; color:var(--muted); }
+.big-denom { font-family:'Share Tech Mono', monospace; font-size:15px; color:var(--muted); }
 .big-lbl {
   font-size: 13px;
   font-weight: 300;
@@ -198,7 +248,7 @@ input[type=range]::-moz-range-thumb {
   background: var(--accent); border: 2px solid var(--bg); cursor:pointer;
 }
 .slider-marks { display:flex; justify-content:space-between; }
-.slider-marks span { font-family:'DM Mono',monospace; font-size:9px; color:var(--muted); }
+.slider-marks span { font-family:'Share Tech Mono', monospace; font-size:9px; color:var(--muted); }
 
 .divider { height:1px; background:var(--border); margin:28px 0; }
 
@@ -208,7 +258,7 @@ textarea {
   width: 100%; background: transparent;
   border: none; border-bottom: 1px solid var(--border);
   color: var(--text);
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Share Tech Mono', monospace;
   font-size: 16px; font-weight: 300;
   line-height: 1.8; padding: 4px 0 14px;
   resize: none; outline: none; min-height: 120px;
@@ -217,14 +267,14 @@ textarea {
 }
 textarea::placeholder { color: var(--muted); opacity: 0.45; }
 textarea:focus { border-bottom-color: var(--accent); }
-.char-ct { font-family:'DM Mono',monospace; font-size:9px; color:var(--muted); text-align:right; margin-top:6px; }
+.char-ct { font-family:'Share Tech Mono', monospace; font-size:9px; color:var(--muted); text-align:right; margin-top:6px; }
 
 /* ── SAVE ── */
 .btn-save {
   width: 100%; padding: 14px;
   background: var(--accent); color: var(--bg);
   border: none;
-  font-family: 'DM Mono', monospace;
+  font-family: 'Share Tech Mono', monospace;
   font-size: 10px; font-weight: 500;
   letter-spacing: 0.18em; text-transform: uppercase;
   cursor: pointer;
@@ -239,7 +289,7 @@ textarea:focus { border-bottom-color: var(--accent); }
   transform: translateX(-50%) translateY(60px);
   background: var(--accent); color: var(--bg);
   padding: 10px 24px;
-  font-family: 'DM Mono', monospace;
+  font-family: 'Share Tech Mono', monospace;
   font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 500;
   opacity: 0;
   transition: transform 0.35s cubic-bezier(0.4,0,0.2,1), opacity 0.35s, background var(--T);
@@ -252,7 +302,7 @@ textarea:focus { border-bottom-color: var(--accent); }
 .mnav-btn {
   background: none; border: none; color: var(--muted);
   font-size: 20px; cursor: pointer; padding: 6px 12px;
-  font-family: 'DM Mono', monospace;
+  font-family: 'Share Tech Mono', monospace;
   transition: color 0.2s;
 }
 .mnav-btn:hover { color: var(--text); }
@@ -261,14 +311,14 @@ textarea:focus { border-bottom-color: var(--accent); }
   text-align: center;
 }
 .month-year {
-  font-family: 'DM Mono', monospace;
+  font-family: 'Share Tech Mono', monospace;
   font-size: 10px; color: var(--muted); letter-spacing: 0.18em; text-align: center; margin-top: 3px;
 }
 
 /* calendar */
 .cal-head { display:grid; grid-template-columns:repeat(7,1fr); gap:2px; margin-bottom:2px; }
 .cal-head span {
-  font-family: 'DM Mono', monospace;
+  font-family: 'Share Tech Mono', monospace;
   font-size: 8px; letter-spacing: 0.12em; color: var(--muted);
   text-align: center; padding: 4px 0; text-transform: uppercase;
 }
@@ -286,7 +336,7 @@ textarea:focus { border-bottom-color: var(--accent); }
 .cal-cell.today { outline: 1px solid var(--accent); outline-offset: -1px; }
 .cal-cell.empty { background: transparent; }
 .cal-day-num {
-  font-family: 'DM Mono', monospace;
+  font-family: 'Share Tech Mono', monospace;
   font-size: 9px; color: var(--muted); line-height: 1; margin-bottom: 1px;
 }
 .cal-cell.has-entry .cal-day-num { color: rgba(0,0,0,0.65); font-weight: 500; }
@@ -305,7 +355,7 @@ textarea:focus { border-bottom-color: var(--accent); }
 .detail.visible { display: block; }
 @keyframes fadeUp { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:none} }
 .detail-date {
-  font-family: 'DM Mono', monospace;
+  font-family: 'Share Tech Mono', monospace;
   font-size: 9px; letter-spacing: 0.18em;
   text-transform: uppercase; color: var(--muted); margin-bottom: 8px;
 }
@@ -327,10 +377,11 @@ textarea:focus { border-bottom-color: var(--accent); }
 
   <!-- THEME SWITCHER -->
   <div class="theme-bar">
-    <div id="storageIndicator" style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.12em;padding:4px 8px;border-radius:2px;margin-right:auto;opacity:0.6"></div>
+    <div id="storageIndicator" style="font-family:'Share Tech Mono', monospace;font-size:9px;letter-spacing:0.12em;padding:4px 8px;border-radius:2px;margin-right:auto;opacity:0.6"></div>
     <button class="th-btn active" data-theme="bw" title="Ч/Б"><span>ч/б</span></button>
     <button class="th-btn" data-theme="indigo" title="Индиго"><span>индиго</span></button>
     <button class="th-btn" data-theme="cyber" title="Киберпанк"><span>кибер</span></button>
+    <button class="th-btn" data-theme="nothing" title="Nothing"><span>nothing</span></button>
   </div>
 
   <!-- TABS -->
@@ -416,6 +467,13 @@ const THEMES = {
     cellText: (i) => i < 3 ? '#00cc55' : '#000',
     uiScale:  ['#004418','#005a20','#007a30','#009940','#00bb50','#00cc55','#00dd66','#00ee77','#00ff88','#aaffdd'],
     glow:     (col) => `rgba(${hexToRgb(col)},0.12)`,
+  },
+  nothing: {
+    // Pure black → deep red → bright red. Nothing OS palette.
+    scale:    ['#0d0000','#1a0000','#280000','#3d0000','#550000','#7a0000','#aa0000','#cc1111','#ee2222','#ff3333'],
+    cellText: (i) => i < 5 ? '#ff3333' : '#fff',
+    uiScale:  ['#3a0000','#4d0000','#660000','#880000','#aa0000','#bb0000','#cc1111','#dd1111','#ee2222','#ff3333'],
+    glow:     (col) => `rgba(${hexToRgb(col)},0.15)`,
   },
 };
 
