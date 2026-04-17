@@ -1,6 +1,1259 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JudoScout Analytics</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0b0d11;
+            --surface: #141821;
+            --surface2: #1d2330;
+            --surface3: #242c3a;
+            --border: rgba(255,255,255,0.08);
+            --accent: #d8ff4d;
+            --text: #f3f5f8;
+            --muted: #95a0b5;
+            --danger: #ff6464;
+            --success: #5af2b4;
+            --warning: #ffcc57;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'IBM Plex Sans', sans-serif;
+        }
+
+        body {
+            background:
+                radial-gradient(circle at top, rgba(216,255,77,0.12), transparent 28%),
+                linear-gradient(180deg, #0c1016 0%, #090b0f 100%);
+            color: var(--text);
+            min-height: 100vh;
+            padding-bottom: 92px;
+        }
+
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: rgba(9,11,15,0.92);
+            backdrop-filter: blur(14px);
+            border-bottom: 1px solid var(--border);
+            padding: 16px;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 29px;
+            color: var(--accent);
+            letter-spacing: 0.05em;
+        }
+
+        .logo span {
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: 12px;
+            letter-spacing: 0.08em;
+            color: var(--text);
+            margin-left: 8px;
+        }
+
+        .subline {
+            margin-top: 10px;
+            color: var(--muted);
+            font-size: 12px;
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .container {
+            max-width: 520px;
+            margin: 0 auto;
+            padding: 16px;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, rgba(216,255,77,0.16), rgba(90,242,180,0.05));
+            border: 1px solid rgba(216,255,77,0.15);
+            border-radius: 18px;
+            padding: 18px;
+            margin-bottom: 16px;
+        }
+
+        .hero-title {
+            font-family: 'Bebas Neue', sans-serif;
+            letter-spacing: 0.04em;
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .hero p {
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.45;
+        }
+
+        .section-title {
+            font-family: 'Bebas Neue', sans-serif;
+            letter-spacing: 0.04em;
+            font-size: 24px;
+            margin-bottom: 12px;
+        }
+
+        .action-row,
+        .segmented,
+        .chip-row,
+        .mini-row {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .action-row {
+            margin-bottom: 14px;
+        }
+
+        .segmented,
+        .chip-row {
+            margin-bottom: 14px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .card,
+        .stat-card {
+            background: rgba(20,24,33,0.96);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 15px;
+            margin-bottom: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+        }
+
+        .stat-card {
+            margin-bottom: 0;
+        }
+
+        .stat-label,
+        .meta {
+            color: var(--muted);
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .stat-val {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 30px;
+            color: var(--accent);
+            margin-top: 4px;
+        }
+
+        .muted {
+            color: var(--muted);
+        }
+
+        .tiny {
+            font-size: 12px;
+        }
+
+        .tag,
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            padding: 5px 9px;
+            border-radius: 999px;
+            background: var(--surface2);
+            color: var(--text);
+            border: 1px solid transparent;
+        }
+
+        .tag-accent {
+            color: #0d0d0d;
+            background: var(--accent);
+        }
+
+        .chip {
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .chip.active {
+            background: rgba(216,255,77,0.16);
+            color: var(--accent);
+            border-color: rgba(216,255,77,0.24);
+        }
+
+        .card-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .scoreline {
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .win {
+            color: var(--success);
+        }
+
+        .loss {
+            color: var(--danger);
+        }
+
+        .neutral {
+            color: var(--warning);
+        }
+
+        .empty {
+            color: var(--muted);
+            text-align: center;
+            padding: 28px 18px;
+            background: rgba(20,24,33,0.82);
+            border-radius: 16px;
+            border: 1px dashed var(--border);
+        }
+
+        .nav-bar {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(20,24,33,0.96);
+            border-top: 1px solid var(--border);
+            backdrop-filter: blur(18px);
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            padding: 12px 14px calc(12px + env(safe-area-inset-bottom));
+            z-index: 60;
+        }
+
+        .nav-item {
+            border-radius: 12px;
+            padding: 10px 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 11px;
+            cursor: pointer;
+            background: transparent;
+            border: 1px solid transparent;
+        }
+
+        .nav-item.active {
+            color: var(--accent);
+            background: rgba(216,255,77,0.08);
+            border-color: rgba(216,255,77,0.2);
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.84);
+            z-index: 100;
+            align-items: flex-end;
+        }
+
+        .overlay.open {
+            display: flex;
+        }
+
+        .sheet {
+            width: 100%;
+            max-height: 92vh;
+            overflow-y: auto;
+            background: #111620;
+            border-radius: 24px 24px 0 0;
+            padding: 22px 18px 26px;
+            border-top: 1px solid var(--border);
+        }
+
+        .sheet h2 {
+            font-family: 'Bebas Neue', sans-serif;
+            letter-spacing: 0.04em;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border-radius: 12px;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            color: var(--text);
+            margin-bottom: 12px;
+        }
+
+        textarea {
+            min-height: 88px;
+            resize: vertical;
+        }
+
+        .field-label {
+            display: block;
+            font-size: 12px;
+            color: var(--muted);
+            margin-bottom: 7px;
+        }
+
+        .btn {
+            width: 100%;
+            border: none;
+            border-radius: 12px;
+            padding: 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-main {
+            background: var(--accent);
+            color: #071006;
+        }
+
+        .btn-soft {
+            background: var(--surface3);
+            color: var(--text);
+        }
+
+        .btn-inline {
+            width: auto;
+            padding: 10px 14px;
+        }
+
+        .throw-row {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 12px;
+            margin-bottom: 10px;
+        }
+
+        .throw-row-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .throw-line {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .throw-line > * {
+            flex: 1 1 120px;
+            margin-bottom: 0;
+        }
+
+        .throw-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .throw-pill {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            padding: 8px 10px;
+            font-size: 11px;
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+            margin: 14px 0;
+        }
+
+        .detail-item {
+            background: var(--surface2);
+            border-radius: 12px;
+            padding: 12px;
+        }
+
+        .detail-item small {
+            display: block;
+            color: var(--muted);
+            font-size: 10px;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+
+        .divider {
+            height: 1px;
+            background: var(--border);
+            margin: 14px 0;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <div class="header">
+        <div class="header-top">
+            <div class="logo">JUDO<span>SCOUT PRO</span></div>
+            <div id="globalWinRate" class="tag tag-accent">WR: 0%</div>
+        </div>
+        <div class="subline">
+            <span id="headerSummary">0 соперников • 0 моих схваток</span>
+            <span id="headerThrows">0 бросков в базе</span>
+        </div>
+    </div>
+
+    <div class="container" id="mainContent"></div>
+
+    <div class="nav-bar">
+        <div class="nav-item active" onclick="showSection('rivals', event)">🥋 Соперники</div>
+        <div class="nav-item" onclick="showSection('matches', event)">⚡ Схватки</div>
+        <div class="nav-item" onclick="showSection('stats', event)">📊 Статистика</div>
+    </div>
+</div>
+
+<div class="overlay" id="formOverlay" onclick="if (event.target === this) closeForm()">
+    <div class="sheet" id="formSheet"></div>
+</div>
+
+<script>
+    const STORAGE = {
+        rivals: 'js_rivals_v2',
+        matches: 'js_match_db_v2',
+        legacyRivals: 'js_rivals',
+        legacyMatches: 'js_matches'
+    };
+
+    const SELF_ID = 'me';
+    const SCORES = ['yuko', 'wazari', 'ippon'];
+
+    let currentSection = 'rivals';
+    let rivals = loadRivals();
+    let matches = loadMatches();
+    let formState = null;
+    let statsFilters = {
+        scope: 'my',
+        stance: 'all',
+        action: 'all'
+    };
+
+    function createId() {
+        return Date.now() + Math.floor(Math.random() * 1000);
+    }
+
+    function normalizeText(value) {
+        return (value || '').trim().toLowerCase();
+    }
+
+    function titleCase(value) {
+        if (!value) return '—';
+        return value
+            .split(' ')
+            .filter(Boolean)
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(' ');
+    }
+
+    function loadRivals() {
+        const saved = JSON.parse(localStorage.getItem(STORAGE.rivals) || 'null');
+        if (saved) return saved;
+
+        const legacy = JSON.parse(localStorage.getItem(STORAGE.legacyRivals) || '[]');
+        return legacy.map(r => ({
+            id: r.id || createId(),
+            name: r.name || '',
+            surname: r.surname || '',
+            country: r.country || '',
+            stance: r.stance || 'неизвестно',
+            club: r.club || ''
+        }));
+    }
+
+    function migrateLegacyMatches() {
+        const legacy = JSON.parse(localStorage.getItem(STORAGE.legacyMatches) || '[]');
+        return legacy.map(m => {
+            const rivalId = Number(m.rivalId) || m.rivalId;
+            const throws = [];
+
+            if (m.myTech) {
+                throws.push({
+                    attackerId: SELF_ID,
+                    technique: normalizeText(m.myTech),
+                    score: m.result === 'win' ? 'ippon' : 'wazari'
+                });
+            }
+
+            if (m.oppTech) {
+                throws.push({
+                    attackerId: rivalId,
+                    technique: normalizeText(m.oppTech),
+                    score: m.result === 'loss' ? 'ippon' : 'wazari'
+                });
+            }
+
+            return {
+                id: m.id || createId(),
+                type: 'my',
+                athlete1Id: SELF_ID,
+                athlete2Id: rivalId,
+                winnerId: m.result === 'win' ? SELF_ID : rivalId,
+                date: '',
+                notes: '',
+                throws
+            };
+        });
+    }
+
+    function loadMatches() {
+        const saved = JSON.parse(localStorage.getItem(STORAGE.matches) || 'null');
+        if (saved) return saved.map(normalizeMatch);
+        return migrateLegacyMatches().map(normalizeMatch);
+    }
+
+    function normalizeMatch(match) {
+        return {
+            id: match.id || createId(),
+            type: match.type || (match.athlete1Id === SELF_ID || match.athlete2Id === SELF_ID ? 'my' : 'scouted'),
+            athlete1Id: match.athlete1Id,
+            athlete2Id: match.athlete2Id,
+            winnerId: match.winnerId || '',
+            date: match.date || '',
+            notes: match.notes || '',
+            throws: Array.isArray(match.throws)
+                ? match.throws.map(t => ({
+                    attackerId: t.attackerId,
+                    technique: normalizeText(t.technique || t.tech || ''),
+                    score: SCORES.includes(t.score) ? t.score : 'wazari'
+                }))
+                : []
+        };
+    }
+
+    function save() {
+        localStorage.setItem(STORAGE.rivals, JSON.stringify(rivals));
+        localStorage.setItem(STORAGE.matches, JSON.stringify(matches));
+        render();
+    }
+
+    function getRivalById(id) {
+        return rivals.find(r => String(r.id) === String(id));
+    }
+
+    function getAthleteName(id) {
+        if (String(id) === SELF_ID) return 'Я';
+        const rival = getRivalById(id);
+        return rival ? `${rival.name} ${rival.surname}`.trim() : 'Неизвестный';
+    }
+
+    function getAthleteShort(id) {
+        if (String(id) === SELF_ID) return 'Я';
+        const rival = getRivalById(id);
+        if (!rival) return 'Неизвестный';
+        return [rival.surname, rival.name].filter(Boolean).join(' ');
+    }
+
+    function getAthleteStance(id) {
+        if (String(id) === SELF_ID) return 'моя стойка';
+        const rival = getRivalById(id);
+        return rival ? rival.stance : 'неизвестно';
+    }
+
+    function isMyMatch(match) {
+        return String(match.athlete1Id) === SELF_ID || String(match.athlete2Id) === SELF_ID;
+    }
+
+    function getOpponentId(match) {
+        if (!isMyMatch(match)) return null;
+        return String(match.athlete1Id) === SELF_ID ? match.athlete2Id : match.athlete1Id;
+    }
+
+    function getMatchTitle(match) {
+        return `${getAthleteShort(match.athlete1Id)} vs ${getAthleteShort(match.athlete2Id)}`;
+    }
+
+    function getResultLabel(match) {
+        if (!match.winnerId) return { text: 'Без победителя', className: 'neutral' };
+        if (isMyMatch(match)) {
+            return String(match.winnerId) === SELF_ID
+                ? { text: 'ПОБЕДА', className: 'win' }
+                : { text: 'ПОРАЖЕНИЕ', className: 'loss' };
+        }
+        return { text: `Победил: ${getAthleteShort(match.winnerId)}`, className: 'neutral' };
+    }
+
+    function getScoreCounts(throws) {
+        const counts = { yuko: 0, wazari: 0, ippon: 0 };
+        throws.forEach(t => {
+            if (counts[t.score] !== undefined) counts[t.score] += 1;
+        });
+        return counts;
+    }
+
+    function getTopTechnique(throws, attackerId = null) {
+        const counts = {};
+        throws.forEach(t => {
+            if (!t.technique) return;
+            if (attackerId && String(t.attackerId) !== String(attackerId)) return;
+            counts[t.technique] = (counts[t.technique] || 0) + 1;
+        });
+        return Object.entries(counts).sort((a, b) => b[1] - a[1])[0]?.[0] || '—';
+    }
+
+    function formatThrow(t) {
+        return `${getAthleteShort(t.attackerId)}: ${titleCase(t.technique || 'без техники')} • ${t.score}`;
+    }
+
+    function getMatchesForRival(rivalId) {
+        return matches.filter(m =>
+            String(m.athlete1Id) === String(rivalId) || String(m.athlete2Id) === String(rivalId)
+        );
+    }
+
+    function getMyMatchesForRival(rivalId) {
+        return matches.filter(m => isMyMatch(m) && String(getOpponentId(m)) === String(rivalId));
+    }
+
+    function getScoutedMatchesForRival(rivalId) {
+        return getMatchesForRival(rivalId).filter(m => !isMyMatch(m));
+    }
+
+    function buildRivalStats(rivalId) {
+        const all = getMatchesForRival(rivalId);
+        const my = getMyMatchesForRival(rivalId);
+        const scouted = getScoutedMatchesForRival(rivalId);
+        const myWins = my.filter(m => String(m.winnerId) === SELF_ID).length;
+        const myLosses = my.filter(m => m.winnerId && String(m.winnerId) !== SELF_ID).length;
+        const attacksOnRival = all.flatMap(m => m.throws.filter(t => String(t.attackerId) !== String(rivalId)));
+        const rivalAttacks = all.flatMap(m => m.throws.filter(t => String(t.attackerId) === String(rivalId)));
+
+        return {
+            total: all.length,
+            myMatches: my.length,
+            scoutedMatches: scouted.length,
+            myWins,
+            myLosses,
+            myWinRate: my.length ? Math.round((myWins / my.length) * 100) : 0,
+            myBestAttack: getTopTechnique(my.flatMap(m => m.throws), SELF_ID),
+            rivalBestAttack: getTopTechnique(all.flatMap(m => m.throws), rivalId),
+            rivalWeakness: getTopTechnique(attacksOnRival),
+            rivalThrowsOnOthers: rivalAttacks.length,
+            totalThrows: all.flatMap(m => m.throws).length
+        };
+    }
+
+    function renderEmptyState(text) {
+        return `<div class="empty">${text}</div>`;
+    }
+
+    function renderHeaderStats() {
+        const myMatches = matches.filter(isMyMatch);
+        const wins = myMatches.filter(m => String(m.winnerId) === SELF_ID).length;
+        const globalWR = myMatches.length ? Math.round((wins / myMatches.length) * 100) : 0;
+        document.getElementById('globalWinRate').innerText = `WR: ${globalWR}%`;
+        document.getElementById('headerSummary').innerText = `${rivals.length} соперников • ${myMatches.length} моих схваток`;
+        document.getElementById('headerThrows').innerText = `${matches.flatMap(m => m.throws).length} бросков в базе`;
+    }
+
+    function render() {
+        renderHeaderStats();
+        const container = document.getElementById('mainContent');
+
+        if (currentSection === 'rivals') {
+            container.innerHTML = renderRivalsSection();
+            return;
+        }
+
+        if (currentSection === 'matches') {
+            container.innerHTML = renderMatchesSection();
+            return;
+        }
+
+        container.innerHTML = renderStatsSection();
+    }
+
+    function renderRivalsSection() {
+        return `
+            <div class="hero">
+                <div class="hero-title">База соперников</div>
+                <p>Теперь у каждого соперника отдельная карточка: твои схватки с ним, его схватки с другими, лучшие броски и слабые места в одной базе.</p>
+            </div>
+            <div class="action-row">
+                <button class="btn btn-main btn-inline" onclick="openRivalForm()">+ Добавить соперника</button>
+            </div>
+            ${rivals.length ? rivals.map(r => {
+                const stats = buildRivalStats(r.id);
+                return `
+                    <div class="card" onclick="openRivalDetail(${r.id})">
+                        <div class="card-head">
+                            <div>
+                                <div class="card-title">${r.name} ${r.surname}</div>
+                                <div class="tiny muted">${r.country || 'Страна не указана'} • ${r.stance}${r.club ? ` • ${r.club}` : ''}</div>
+                            </div>
+                            <div class="tag">${stats.total} схв.</div>
+                        </div>
+                        <div class="mini-row">
+                            <span class="tag">Мои: ${stats.myMatches}</span>
+                            <span class="tag">Чужие: ${stats.scoutedMatches}</span>
+                            <span class="tag">WR: ${stats.myWinRate}%</span>
+                        </div>
+                        <div class="divider"></div>
+                        <div class="tiny muted">Мой лучший бросок: <span style="color:var(--accent)">${titleCase(stats.myBestAttack)}</span></div>
+                        <div class="tiny muted" style="margin-top:6px">Чаще падает на: <span style="color:var(--warning)">${titleCase(stats.rivalWeakness)}</span></div>
+                    </div>
+                `;
+            }).join('') : renderEmptyState('Добавьте первого соперника, чтобы собирать по нему отдельную базу и статистику.')}
+        `;
+    }
+
+    function renderMatchesSection() {
+        const sorted = matches.slice().sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')) || Number(b.id) - Number(a.id));
+        return `
+            <div class="hero">
+                <div class="hero-title">Схватки и разведка</div>
+                <p>Записывай отдельно свои схватки и схватки соперников между собой. Одна запись ` + '`А vs Б`' + ` автоматически попадает в карточки обоих соперников. В каждой записи можно добавить сколько угодно бросков с оценками ` + '`yuko`' + `, ` + '`wazari`' + ` и ` + '`ippon`' + `.</p>
+            </div>
+            <div class="action-row">
+                <button class="btn btn-main btn-inline" onclick="openMyMatchForm()">+ Моя схватка</button>
+                <button class="btn btn-soft btn-inline" onclick="openScoutedMatchForm()">+ Схватка соперников</button>
+            </div>
+            ${sorted.length ? sorted.map(renderMatchCard).join('') : renderEmptyState('Пока нет схваток. Добавьте первую запись и начните собирать броски по ходу сезона.')}
+        `;
+    }
+
+    function renderMatchCard(match) {
+        const result = getResultLabel(match);
+        const score = getScoreCounts(match.throws);
+        const throwsHtml = match.throws.length
+            ? `<div class="throw-stack">${match.throws.map(t => `<span class="throw-pill">${formatThrow(t)}</span>`).join('')}</div>`
+            : '<div class="tiny muted">Броски не добавлены.</div>';
+
+        return `
+            <div class="card">
+                <div class="card-head">
+                    <div>
+                        <div class="card-title">${getMatchTitle(match)}</div>
+                        <div class="tiny muted">${match.type === 'my' ? 'Моя база' : 'Разведка соперников'}${match.date ? ` • ${match.date}` : ''}</div>
+                    </div>
+                    <div class="scoreline ${result.className}">${result.text}</div>
+                </div>
+                <div class="mini-row">
+                    <span class="tag">Y: ${score.yuko}</span>
+                    <span class="tag">W: ${score.wazari}</span>
+                    <span class="tag">I: ${score.ippon}</span>
+                </div>
+                ${throwsHtml}
+                ${match.notes ? `<div class="tiny muted" style="margin-top:10px">${match.notes}</div>` : ''}
+            </div>
+        `;
+    }
+
+    function getFilteredStatsMatches() {
+        return matches.filter(match => {
+            if (statsFilters.scope === 'my' && !isMyMatch(match)) return false;
+
+            if (statsFilters.stance !== 'all') {
+                if (isMyMatch(match)) {
+                    const opponent = getRivalById(getOpponentId(match));
+                    if (!opponent || opponent.stance !== statsFilters.stance) return false;
+                } else {
+                    const athletes = [getRivalById(match.athlete1Id), getRivalById(match.athlete2Id)].filter(Boolean);
+                    if (!athletes.some(a => a.stance === statsFilters.stance)) return false;
+                }
+            }
+
+            return true;
+        });
+    }
+
+    function getRelevantThrowsForStats(filteredMatches) {
+        if (statsFilters.action === 'all') {
+            return filteredMatches.flatMap(m => m.throws);
+        }
+
+        if (statsFilters.scope === 'my') {
+            return filteredMatches.flatMap(match => match.throws.filter(t =>
+                statsFilters.action === 'threw'
+                    ? String(t.attackerId) === SELF_ID
+                    : String(t.attackerId) !== SELF_ID
+            ));
+        }
+
+        return filteredMatches.flatMap(match => match.throws.filter(t =>
+            statsFilters.action === 'threw'
+                ? String(t.attackerId) === String(match.athlete1Id) || String(t.attackerId) === String(match.athlete2Id)
+                : true
+        ));
+    }
+
+    function renderStatsSection() {
+        const filteredMatches = getFilteredStatsMatches();
+        const relevantThrows = getRelevantThrowsForStats(filteredMatches);
+        const myFilteredMatches = filteredMatches.filter(isMyMatch);
+        const wins = myFilteredMatches.filter(m => String(m.winnerId) === SELF_ID).length;
+        const score = getScoreCounts(relevantThrows);
+        const topTechnique = getTopTechnique(relevantThrows);
+        const topFallTechnique = getTopTechnique(
+            filteredMatches.flatMap(m => m.throws.filter(t => isMyMatch(m) && String(t.attackerId) !== SELF_ID))
+        );
+
+        return `
+            <div class="hero">
+                <div class="hero-title">Общая статистика</div>
+                <p>Фильтруй базу по своим схваткам или по всей разведке и задавай переменные: ` + '`бросила`' + `, ` + '`упала`' + `, ` + '`правша`' + `, ` + '`левша`' + `.</p>
+            </div>
+            <div class="card">
+                <div class="stat-label" style="margin-bottom:10px">Выбор базы</div>
+                <div class="segmented">
+                    <span class="chip ${statsFilters.scope === 'my' ? 'active' : ''}" onclick="setStatsFilter('scope', 'my')">Мои схватки</span>
+                    <span class="chip ${statsFilters.scope === 'all' ? 'active' : ''}" onclick="setStatsFilter('scope', 'all')">Вся база</span>
+                </div>
+                <div class="stat-label" style="margin-bottom:10px">Стойка</div>
+                <div class="chip-row">
+                    <span class="chip ${statsFilters.stance === 'all' ? 'active' : ''}" onclick="setStatsFilter('stance', 'all')">Все</span>
+                    <span class="chip ${statsFilters.stance === 'правша' ? 'active' : ''}" onclick="setStatsFilter('stance', 'правша')">Правша</span>
+                    <span class="chip ${statsFilters.stance === 'левша' ? 'active' : ''}" onclick="setStatsFilter('stance', 'левша')">Левша</span>
+                </div>
+                <div class="stat-label" style="margin-bottom:10px">Переменная</div>
+                <div class="chip-row" style="margin-bottom:0">
+                    <span class="chip ${statsFilters.action === 'all' ? 'active' : ''}" onclick="setStatsFilter('action', 'all')">Все события</span>
+                    <span class="chip ${statsFilters.action === 'threw' ? 'active' : ''}" onclick="setStatsFilter('action', 'threw')">Бросила</span>
+                    <span class="chip ${statsFilters.action === 'fell' ? 'active' : ''}" onclick="setStatsFilter('action', 'fell')">Упала</span>
+                </div>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Схваток в фильтре</div>
+                    <div class="stat-val">${filteredMatches.length}</div>
+                    <div class="tiny muted">Под выбранные условия</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Бросков в фильтре</div>
+                    <div class="stat-val">${relevantThrows.length}</div>
+                    <div class="tiny muted">С учетом переменной</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Мой винрейт</div>
+                    <div class="stat-val">${myFilteredMatches.length ? Math.round((wins / myFilteredMatches.length) * 100) : 0}%</div>
+                    <div class="tiny muted">Считается по моим схваткам</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Топ техника</div>
+                    <div class="stat-val" style="font-size:22px">${titleCase(topTechnique)}</div>
+                    <div class="tiny muted">Чаще всего встречается</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-title" style="margin-bottom:10px">Распределение оценок</div>
+                <div class="mini-row">
+                    <span class="tag">Yuko: ${score.yuko}</span>
+                    <span class="tag">Wazari: ${score.wazari}</span>
+                    <span class="tag">Ippon: ${score.ippon}</span>
+                </div>
+                <div class="divider"></div>
+                <div class="tiny muted">Чаще всего я падаю на: <span style="color:var(--danger)">${titleCase(topFallTechnique)}</span></div>
+            </div>
+            <div class="card">
+                <div class="card-title" style="margin-bottom:10px">Сводка по базе</div>
+                <div class="tiny muted">Соперников в базе: ${rivals.length}</div>
+                <div class="tiny muted" style="margin-top:6px">Моих схваток: ${matches.filter(isMyMatch).length}</div>
+                <div class="tiny muted" style="margin-top:6px">Чужих схваток: ${matches.filter(m => !isMyMatch(m)).length}</div>
+            </div>
+        `;
+    }
+
+    function setStatsFilter(key, value) {
+        statsFilters[key] = value;
+        render();
+    }
+
+    function openRivalForm() {
+        document.getElementById('formSheet').innerHTML = `
+            <h2>Новый соперник</h2>
+            <div class="tiny muted" style="margin-bottom:14px">Эта запись попадет в отдельную базу соперников и будет использоваться в твоих схватках и в разведке.</div>
+            <span class="field-label">Имя</span>
+            <input id="rName" placeholder="Имя">
+            <span class="field-label">Фамилия</span>
+            <input id="rSurname" placeholder="Фамилия">
+            <span class="field-label">Страна</span>
+            <input id="rCountry" placeholder="Страна">
+            <span class="field-label">Клуб / школа</span>
+            <input id="rClub" placeholder="Клуб">
+            <span class="field-label">Стойка</span>
+            <select id="rStance">
+                <option value="правша">Правша</option>
+                <option value="левша">Левша</option>
+                <option value="меняет">Меняет стойку</option>
+            </select>
+            <button class="btn btn-main" onclick="addRival()">Сохранить соперника</button>
+        `;
+        document.getElementById('formOverlay').classList.add('open');
+    }
+
+    function openMyMatchForm() {
+        if (!rivals.length) {
+            showNoRivalsWarning();
+            return;
+        }
+
+        formState = {
+            mode: 'my',
+            rivalId: String(rivals[0].id),
+            winnerId: SELF_ID,
+            date: '',
+            notes: '',
+            throws: [
+                { attackerId: SELF_ID, technique: '', score: 'wazari' }
+            ]
+        };
+        renderMatchForm();
+    }
+
+    function openScoutedMatchForm() {
+        if (rivals.length < 2) {
+            document.getElementById('formSheet').innerHTML = `
+                <h2>Нужны два соперника</h2>
+                <div class="empty" style="margin-bottom:12px">Чтобы записать чужую схватку, сначала добавьте минимум двух соперников в базу.</div>
+                <button class="btn btn-main" onclick="openRivalForm()">Добавить соперника</button>
+            `;
+            document.getElementById('formOverlay').classList.add('open');
+            return;
+        }
+
+        formState = {
+            mode: 'scouted',
+            athlete1Id: String(rivals[0].id),
+            athlete2Id: String(rivals[1].id),
+            winnerId: String(rivals[0].id),
+            date: '',
+            notes: '',
+            throws: [
+                { attackerId: String(rivals[0].id), technique: '', score: 'wazari' }
+            ]
+        };
+        renderMatchForm();
+    }
+
+    function openScoutedMatchForRival(rivalId) {
+        if (rivals.length < 2) {
+            openScoutedMatchForm();
+            return;
+        }
+
+        const primary = getRivalById(rivalId) || rivals[0];
+        const secondary = rivals.find(r => String(r.id) !== String(primary.id)) || rivals[1];
+
+        formState = {
+            mode: 'scouted',
+            athlete1Id: String(primary.id),
+            athlete2Id: String(secondary.id),
+            winnerId: String(primary.id),
+            date: '',
+            notes: '',
+            throws: [
+                { attackerId: String(primary.id), technique: '', score: 'wazari' }
+            ]
+        };
+        renderMatchForm();
+    }
+
+    function showNoRivalsWarning() {
+        document.getElementById('formSheet').innerHTML = `
+            <h2>Сначала соперники</h2>
+            <div class="empty" style="margin-bottom:12px">Добавьте хотя бы одного соперника, чтобы записать свою схватку.</div>
+            <button class="btn btn-main" onclick="openRivalForm()">Перейти к соперникам</button>
+        `;
+        document.getElementById('formOverlay').classList.add('open');
+    }
+
+    function renderMatchForm() {
+        if (!formState) return;
+
+        const isMy = formState.mode === 'my';
+        const participantOptions = isMy
+            ? [
+                { value: SELF_ID, label: 'Я' },
+                { value: formState.rivalId, label: getAthleteShort(formState.rivalId) }
+            ]
+            : [
+                { value: formState.athlete1Id, label: getAthleteShort(formState.athlete1Id) },
+                { value: formState.athlete2Id, label: getAthleteShort(formState.athlete2Id) }
+            ];
+
+        document.getElementById('formSheet').innerHTML = `
+            <h2>${isMy ? 'Моя схватка' : 'Схватка соперников'}</h2>
+            <div class="tiny muted" style="margin-bottom:14px">${isMy ? 'Запись пойдет в твою личную базу против соперника.' : 'Одна запись будет автоматически показана в карточках обоих соперников.'}</div>
+            ${isMy ? `
+                <span class="field-label">Соперник</span>
+                <select id="formRival" onchange="updateMatchFormField('rivalId', this.value); syncMyFormAfterRivalChange();">
+                    ${rivals.map(r => `<option value="${r.id}" ${String(r.id) === String(formState.rivalId) ? 'selected' : ''}>${r.surname} ${r.name} (${r.stance})</option>`).join('')}
+                </select>
+            ` : `
+                <span class="field-label">Первый соперник</span>
+                <select id="formAthlete1" onchange="updateMatchFormField('athlete1Id', this.value); syncScoutedParticipants();">
+                    ${rivals.map(r => `<option value="${r.id}" ${String(r.id) === String(formState.athlete1Id) ? 'selected' : ''}>${r.surname} ${r.name}</option>`).join('')}
+                </select>
+                <span class="field-label">Второй соперник</span>
+                <select id="formAthlete2" onchange="updateMatchFormField('athlete2Id', this.value); syncScoutedParticipants();">
+                    ${rivals.map(r => `<option value="${r.id}" ${String(r.id) === String(formState.athlete2Id) ? 'selected' : ''}>${r.surname} ${r.name}</option>`).join('')}
+                </select>
+            `}
+            <span class="field-label">Победитель</span>
+            <select id="formWinner" onchange="updateMatchFormField('winnerId', this.value)">
+                ${participantOptions.map(p => `<option value="${p.value}" ${String(p.value) === String(formState.winnerId) ? 'selected' : ''}>${p.label}</option>`).join('')}
+            </select>
+            <span class="field-label">Дата</span>
+            <input id="formDate" type="date" value="${formState.date}" onchange="updateMatchFormField('date', this.value)">
+            <span class="field-label">Броски и оценки</span>
+            <div id="throwsContainer">${renderThrowEditor(participantOptions)}</div>
+            <button class="btn btn-soft" style="margin-bottom:12px" onclick="addThrowRow()">+ Добавить бросок</button>
+            <span class="field-label">Заметки</span>
+            <textarea id="formNotes" placeholder="Что заметила по темпу, захвату, защите, входам..." onchange="updateMatchFormField('notes', this.value)">${formState.notes}</textarea>
+            <button class="btn btn-main" onclick="saveCurrentMatch()">Сохранить схватку</button>
+        `;
+        document.getElementById('formOverlay').classList.add('open');
+    }
+
+    function renderThrowEditor(participantOptions) {
+        return formState.throws.map((t, index) => `
+            <div class="throw-row">
+                <div class="throw-row-head">
+                    <strong>Бросок ${index + 1}</strong>
+                    <span class="chip" onclick="removeThrowRow(${index})">Удалить</span>
+                </div>
+                <div class="throw-line">
+                    <select onchange="updateThrow(${index}, 'attackerId', this.value)">
+                        ${participantOptions.map(p => `<option value="${p.value}" ${String(p.value) === String(t.attackerId) ? 'selected' : ''}>${p.label}</option>`).join('')}
+                    </select>
+                    <input value="${t.technique || ''}" placeholder="Например: uchi mata" oninput="updateThrow(${index}, 'technique', this.value)">
+                    <select onchange="updateThrow(${index}, 'score', this.value)">
+                        ${SCORES.map(score => `<option value="${score}" ${score === t.score ? 'selected' : ''}>${score}</option>`).join('')}
+                    </select>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function updateMatchFormField(field, value) {
+        if (!formState) return;
+        formState[field] = value;
+    }
+
+    function syncMyFormAfterRivalChange() {
+        if (!formState || formState.mode !== 'my') return;
+
+        formState.throws = formState.throws.map(t => ({
+            ...t,
+            attackerId: String(t.attackerId) === SELF_ID ? SELF_ID : formState.rivalId
+        }));
+        if (String(formState.winnerId) !== SELF_ID) {
+            formState.winnerId = formState.rivalId;
+        }
+        renderMatchForm();
+    }
+
+    function syncScoutedParticipants() {
+        if (!formState || formState.mode !== 'scouted') return;
+
+        if (String(formState.athlete1Id) === String(formState.athlete2Id)) {
+            const fallback = rivals.find(r => String(r.id) !== String(formState.athlete1Id));
+            if (fallback) formState.athlete2Id = String(fallback.id);
+        }
+
+        const validIds = [String(formState.athlete1Id), String(formState.athlete2Id)];
+        if (!validIds.includes(String(formState.winnerId))) {
+            formState.winnerId = formState.athlete1Id;
+        }
+
+        formState.throws = formState.throws.map(t => ({
+            ...t,
+            attackerId: validIds.includes(String(t.attackerId)) ? t.attackerId : formState.athlete1Id
+        }));
+
+        renderMatchForm();
+    }
+
+    function addThrowRow() {
+        if (!formState) return;
+        const defaultAttacker = formState.mode === 'my' ? SELF_ID : formState.athlete1Id;
+        formState.throws.push({ attackerId: defaultAttacker, technique: '', score: 'wazari' });
+        renderMatchForm();
+    }
+
+    function removeThrowRow(index) {
+        if (!formState) return;
+        formState.throws.splice(index, 1);
+        if (!formState.throws.length) {
+            addThrowRow();
+            return;
+        }
+        renderMatchForm();
+    }
+
+    function updateThrow(index, field, value) {
+        if (!formState || !formState.throws[index]) return;
+        formState.throws[index][field] = field === 'technique' ? normalizeText(value) : value;
+    }
+
+    function saveCurrentMatch() {
+        if (!formState) return;
+
+        if (formState.mode === 'scouted' && String(formState.athlete1Id) === String(formState.athlete2Id)) {
+            alert('Для чужой схватки выберите двух разных соперников.');
+            return;
+        }
+
+        const cleanThrows = formState.throws
+            .map(t => ({
+                attackerId: t.attackerId,
+                technique: normalizeText(t.technique),
+                score: t.score
+            }))
+            .filter(t => t.technique || t.score);
+
+        const match = normalizeMatch({
+            id: createId(),
+            type: formState.mode,
+            athlete1Id: formState.mode === 'my' ? SELF_ID : formState.athlete1Id,
+            athlete2Id: formState.mode === 'my' ? formState.rivalId : formState.athlete2Id,
+            winnerId: formState.winnerId,
+            date: formState.date,
+            notes: formState.notes.trim(),
+            throws: cleanThrows
+        });
+
+        matches.push(match);
+        formState = null;
+        save();
+        closeForm();
+    }
+
+    function addRival() {
+        const name = document.getElementById('rName').value.trim();
+        const surname = document.getElementById('rSurname').value.trim();
+
+        if (!name || !surname) {
+            alert('Укажите имя и фамилию соперника.');
+            return;
+        }
+
+        rivals.push({
+            id: createId(),
+            name,
+            surname,
+            country: document.getElementById('rCountry').value.trim(),
+            club: document.getElementById('rClub').value.trim(),
+            stance: document.getElementById('rStance').value
+        });
+
+        save();
+        closeForm();
+    }
+
+    function openRivalDetail(rivalId) {
+        const rival = getRivalById(rivalId);
+        if (!rival) return;
+
+        const stats = buildRivalStats(rivalId);
+        const myMatches = getMyMatchesForRival(rivalId).slice().reverse();
+        const scoutedMatches = getScoutedMatchesForRival(rivalId).slice().reverse();
+
+        document.getElementById('formSheet').innerHTML = `
+            <h2>${rival.name} ${rival.surname}</h2>
+            <div class="tiny muted">${rival.country || 'Страна не указана'} • ${rival.stance}${rival.club ? ` • ${rival.club}` : ''}</div>
+            <div class="detail-grid">
+                <div class="detail-item">
+                    <small>Мои схватки</small>
+                    <strong>${stats.myMatches}</strong>
+                </div>
+                <div class="detail-item">
+                    <small>Чужие схватки</small>
+                    <strong>${stats.scoutedMatches}</strong>
+                </div>
+                <div class="detail-item">
+                    <small>Мой винрейт</small>
+                    <strong class="win">${stats.myWinRate}%</strong>
+                </div>
+                <div class="detail-item">
+                    <small>Всего бросков</small>
+                    <strong>${stats.totalThrows}</strong>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-title" style="margin-bottom:10px">Моя база против соперника</div>
+                <div class="tiny muted">Победы: <span class="win">${stats.myWins}</span> • Поражения: <span class="loss">${stats.myLosses}</span></div>
+                <div class="tiny muted" style="margin-top:6px">Мой лучший бросок: <span style="color:var(--accent)">${titleCase(stats.myBestAttack)}</span></div>
+                <div class="tiny muted" style="margin-top:6px">Чаще всего она падает на: <span style="color:var(--warning)">${titleCase(stats.rivalWeakness)}</span></div>
+            </div>
+            <div class="card">
+                <div class="card-title" style="margin-bottom:10px">Общая база по сопернику</div>
+                <div class="tiny muted">Лучший бросок соперника: <span style="color:var(--accent)">${titleCase(stats.rivalBestAttack)}</span></div>
+                <div class="tiny muted" style="margin-top:6px">Ее результативных бросков в базе: ${stats.rivalThrowsOnOthers}</div>
+                <button class="btn btn-soft" style="margin-top:12px" onclick="event.stopPropagation(); openScoutedMatchForRival(${rival.id})">+ Добавить схватку с другим соперником</button>
+            </div>
+            <div class="card">
+                <div class="card-title" style="margin-bottom:10px">Мои схватки с ней</div>
+                ${myMatches.length ? myMatches.map(renderMatchCard).join('') : '<div class="tiny muted">Пока нет записей.</div>'}
+            </div>
+            <div class="card">
+                <div class="card-title" style="margin-bottom:10px">Ее схватки не со мной</div>
+                <div class="tiny muted" style="margin-bottom:10px">Каждая запись здесь автоматически учитывается и в карточке второго участника этой схватки.</div>
+                ${scoutedMatches.length ? scoutedMatches.map(renderMatchCard).join('') : '<div class="tiny muted">Пока нет разведывательных записей.</div>'}
+            </div>
+            <button class="btn btn-main" onclick="closeForm()">Закрыть карточку</button>
+        `;
+        document.getElementById('formOverlay').classList.add('open');
+    }
+
+    function showSection(section, event) {
+        currentSection = section;
+        document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+        if (event && event.currentTarget) event.currentTarget.classList.add('active');
+        render();
+    }
+
+    function closeForm() {
+        formState = null;
+        document.getElementById('formOverlay').classList.remove('open');
+    }
+
+    render();
+</script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Judo Scout</title>
